@@ -18,6 +18,9 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+
+/* This file has been modified for PPC support */
+
 #include "SDL_config.h"
 
 #if SDL_VIDEO_DRIVER_COCOA
@@ -28,6 +31,10 @@
 static NSString *
 GetTextFormat(_THIS)
 {
+#if defined(__ppc__) || defined(__ppc64__)
+    /* PowerPC is only OS 10.5.8 at the latest version, so it's always this */
+    return NSStringPboardType;
+#else
     SDL_VideoData *data = (SDL_VideoData *) _this->driverdata;
 
     if (data->osversion >= 0x1060) {
@@ -35,6 +42,7 @@ GetTextFormat(_THIS)
     } else {
         return NSStringPboardType;
     }
+#endif /* defined(__ppc__) || defined(__ppc64__) */
 }
 
 int

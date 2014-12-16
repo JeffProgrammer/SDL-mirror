@@ -43,6 +43,13 @@ Release
 # for Android
 android-project/local.properties
 
+# my additions
+.DS_Store
+Xcode/.DS_Store
+Xcode/SDL/.DS_Store
+Xcode/SDL/SDL.xcodeproj/jeff.pbxuser
+Xcode/SDL/build/
+
 sdl.pc
 test/autom4te*
 test/config.cache

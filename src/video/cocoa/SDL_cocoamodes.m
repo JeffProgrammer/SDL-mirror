@@ -18,6 +18,9 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+
+/* This file has been modified for PPC support */
+
 #include "SDL_config.h"
 
 #if SDL_VIDEO_DRIVER_COCOA
@@ -50,7 +53,7 @@ static inline void Cocoa_ToggleMenuBar(const BOOL show)
 
 
 /* !!! FIXME: clean out the pre-10.6 code when it makes sense to do so. */
-#define FORCE_OLD_API 0
+#define FORCE_OLD_API 1 /* PPC: change to 1 */
 
 #if FORCE_OLD_API
 #undef MAC_OS_X_VERSION_MIN_REQUIRED
@@ -125,6 +128,8 @@ GetDisplayMode(_THIS, const void *moderef, SDL_DisplayMode *mode)
     }
     data->moderef = moderef;
 
+/* PPC can only go up to leopard..... */
+#if !defined(__ppc__) && !defined(__ppc64__)
     if (IS_SNOW_LEOPARD_OR_LATER(_this)) {
         CGDisplayModeRef vidmode = (CGDisplayModeRef) moderef;
         CFStringRef fmt = CGDisplayModeCopyPixelEncoding(vidmode);
@@ -144,6 +149,7 @@ GetDisplayMode(_THIS, const void *moderef, SDL_DisplayMode *mode)
 
         CFRelease(fmt);
     }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
 
     #if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
     if (!IS_SNOW_LEOPARD_OR_LATER(_this)) {
@@ -182,17 +188,23 @@ GetDisplayMode(_THIS, const void *moderef, SDL_DisplayMode *mode)
 static inline void
 Cocoa_ReleaseDisplayMode(_THIS, const void *moderef)
 {
+/* TODO: figure out for PPC ??? */
+#if !defined(__ppc__) && !defined(__ppc64__)
     if (IS_SNOW_LEOPARD_OR_LATER(_this)) {
         CGDisplayModeRelease((CGDisplayModeRef) moderef);  /* NULL is ok */
     }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
 }
 
 static inline void
 Cocoa_ReleaseDisplayModeList(_THIS, CFArrayRef modelist)
 {
+/* TODO: figure out for PPC ??? */
+#if !defined(__ppc__) && !defined(__ppc64__)
     if (IS_SNOW_LEOPARD_OR_LATER(_this)) {
         CFRelease(modelist);  /* NULL is ok */
     }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
 }
 
 static const char *
@@ -335,9 +347,11 @@ Cocoa_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
             const void *moderef = CFArrayGetValueAtIndex(modes, i);
             SDL_DisplayMode mode;
             if (GetDisplayMode(_this, moderef, &mode)) {
+#if !defined(__ppc__) && !defined(__ppc64__)                
                 if (IS_SNOW_LEOPARD_OR_LATER(_this)) {
                     CGDisplayModeRetain((CGDisplayModeRef) moderef);
                 }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
                 SDL_AddDisplayMode(display, &mode);
             }
         }
@@ -349,9 +363,11 @@ Cocoa_GetDisplayModes(_THIS, SDL_VideoDisplay * display)
 static CGError
 Cocoa_SwitchMode(_THIS, CGDirectDisplayID display, const void *mode)
 {
+#if !defined(__ppc__) && !defined(__ppc64__)
     if (IS_SNOW_LEOPARD_OR_LATER(_this)) {
         return CGDisplaySetDisplayMode(display, (CGDisplayModeRef) mode, NULL);
     }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
  
     #if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
     if (!IS_SNOW_LEOPARD_OR_LATER(_this)) {

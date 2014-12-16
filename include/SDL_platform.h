@@ -25,6 +25,8 @@
  *  Try to get a standard set of platform defines.
  */
 
+/* This file has been modified for PPC support */
+
 #ifndef _SDL_platform_h
 #define _SDL_platform_h
 
@@ -86,8 +88,8 @@
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1050
 # error SDL for Mac OS X only supports deploying on 10.5 and above.
 #endif /* MAC_OS_X_VERSION_MIN_REQUIRED < 1050 */
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
-# error SDL for Mac OS X must be built with a 10.6 SDK or above.
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060 /* changed to warning for PPC support */
+# warning SDL for Mac OS X must be built with a 10.6 SDK or above.
 #endif /* MAC_OS_X_VERSION_MAX_ALLOWED < 1060 */
 #endif /* TARGET_OS_IPHONE */
 #endif /* defined(__APPLE__) */

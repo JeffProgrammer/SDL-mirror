@@ -18,6 +18,9 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+
+/* This file has been modified for PPC support */
+
 #include "SDL_config.h"
 
 #if SDL_VIDEO_DRIVER_COCOA
@@ -482,6 +485,8 @@ static void ScheduleContextUpdates(SDL_WindowData *data)
 
 - (void)handleTouches:(cocoaTouchType)type withEvent:(NSEvent *)event
 {
+// PPC doesn't have touch screens.  What is htis 2014?
+#if !defined(__ppc__) && !defined(__ppc64__)
     NSSet *touches = 0;
     NSEnumerator *enumerator;
     NSTouch *touch;
@@ -530,6 +535,7 @@ static void ScheduleContextUpdates(SDL_WindowData *data)
 
         touch = (NSTouch*)[enumerator nextObject];
     }
+#endif /* !defined(__ppc__) && !defined(__ppc64__) */
 }
 
 @end

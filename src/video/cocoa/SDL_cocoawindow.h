@@ -18,6 +18,9 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+
+/* This file has been modified for PPC support */
+
 #include "SDL_config.h"
 
 #ifndef _SDL_cocoawindow_h
@@ -27,7 +30,11 @@
 
 typedef struct SDL_WindowData SDL_WindowData;
 
+#if defined(__ppc__) || defined(__ppc64__)
+@interface Cocoa_WindowListener : NSResponder {
+#else
 @interface Cocoa_WindowListener : NSResponder <NSWindowDelegate> {
+#endif /* defined(__ppc__) || defined(__ppc46__) */
     SDL_WindowData *_data;
     BOOL observingVisible;
     BOOL wasVisible;
